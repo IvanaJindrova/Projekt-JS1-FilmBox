@@ -1,2 +1,3 @@
-# Projekt-JS1-FilmBox
-Závěrečný projekt Czechitas na JavaScript1 - téma FilmBox
+# FilmBox
+
+Závěrečný projekt kurzu JS 1.
