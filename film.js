@@ -119,62 +119,174 @@ const filmy = [
 ]
 
 //5.úkol
-
 const filmId = window.location.hash.slice(1)
-console.log(filmId)
 const film = filmy.find((filmik) => filmik.id === filmId)
-console.log(film)
-
-const detailFilmu = document.querySelector("#detail-filmu")
 
 if(film) {
-	detailFilmu.innerHTML += `
+	const detailFilmu = document.querySelector("#detail-filmu")
+	detailFilmu.querySelector(".card-title").textContent = filmy.nazev
+	detailFilmu.querySelector(".card-text").textContent = filmy.popis
+
+	detailFilmu.innerHTML = `
+	<div class="card mb-3" id="detail-filmu">
 	<div class="row g-0">
-	<div class="col-md-5">
-		<img
-			src=${film.plakat.url}
-			alt="plakát"
-			class="img-fluid rounded-start"
-			width=${film.plakat.sirka}
-			height=${film.plakat.vyska}
-		/>
-	</div>
-	<div class="col-md-7">
-		<div class="card-body">
-			<h5 class="card-title">${film.nazev}</h5>
-			<p class="card-text">${film.popis}</p>
-			<p class="card-text">
-				<small class="text-muted" id="premiera">Premiéra <strong>24. prosince 2022</strong>, což je za 24dní.</small>
-			</p>
+		<div class="col-md-5">
+			<img
+				src=${film.plakat.url}
+				alt="plakát"
+				class="img-fluid rounded-start"
+				width=${film.plakat.sirka}
+				height=${film.plakat.vyska}
+			/>
 		</div>
+		<div class="col-md-7">
+			<div class="card-body">
+				<h5 class="card-title">${film.nazev}</h5>
+				<p class="card-text">${film.popis}</p>
+				<p class="card-text">
+					<small class="text-muted" id="premiera">Premiéra <strong>24. prosince 2022</strong>, což je za 24dní.</small>
+				</p>
+				<h6>Hodnocení</h6>
+				<div class="stars">
+					<button
+						class="far fa-star button-star"
+						data-mdb-toggle="tooltip"
+						title="Nic moc"
+					>
+						1
+					</button>
+					<button
+						class="far fa-star button-star"
+						data-mdb-toggle="tooltip"
+						title="Ucházející"
+					>
+						2
+					</button>
+					<button
+						class="far fa-star button-star"
+						data-mdb-toggle="tooltip"
+						title="Dobrý"
+					>
+						3
+					</button>
+					<button
+						class="far fa-star button-star"
+						data-mdb-toggle="tooltip"
+						title="Skvělý"
+					>
+						4
+					</button>
+					<button
+						class="far fa-star button-star"
+						data-mdb-toggle="tooltip"
+						title="Úžasný"
+					>
+						5
+					</button>
+				</div>
+
+				<h6 class="mt-4">Poznámka</h6>
+				<form id="note-form">
+					<div class="row">
+						<div class="col-md-6 col-lg-7 col-xl-8 mb-2">
+							<div class="form-outline">
+								<textarea
+									class="form-control"
+									id="message-input"
+									rows="4"
+								></textarea>
+								<label class="form-label" for="message-input"
+									>Text poznámky</label
+								>
+							</div>
+						</div>
+						<div class="col-md-6 col-lg-5 col-xl-4">
+							<div class="form-check d-flex justify-content-center mb-2">
+								<input
+									class="form-check-input me-2 mb-2"
+									type="checkbox"
+									value=""
+									id="terms-checkbox"
+								/>
+								<label class="form-check-label" for="terms-checkbox">
+									Souhlasím se všeobecnými podmínky užívání.
+								</label>
+							</div>
+							<button type="submit" class="btn btn-primary btn-block">
+								Uložit
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
   `
 }
 
-/*
-filmy.forEach((f) => {
-	detailFilmu.innerHTML += `
-	<div class="row g-0">
-	<div class="col-md-5">
-		<img
-			src=${f.plakat.url}
-			alt="plakát"
-			class="img-fluid rounded-start"
-			width=${f.plakat.sirka}
-			height=${f.plakat.vyska}
-		/>
-	</div>
-	<div class="col-md-7">
-		<div class="card-body">
-			<h5 class="card-title">${f.nazev}</h5>
-			<p class="card-text">${f.popis}</p>
-			<p class="card-text">
-				<small class="text-muted" id="premiera">Premiéra <strong>24. prosince 2022</strong>, což je za 24dní.</small>
-			</p>
-		</div>
-		</div>
-	</div>
-  `
+//6.úkol
+if (film) {
+	const premiera = document.querySelector('#premiera')
+    const denPremiery = dayjs(film.premiera, 'YYYY-MM-DD').format('D. M. YYYY')
+	const rozdil = dayjs().diff(dayjs(film.premiera), 'days')
+    premiera.innerHTML = `<small class="text-muted" id="premiera">Premiéra <strong>${denPremiery}</strong>, což bylo před ${rozdil} dny.`
+}
+
+
+//7.úkol
+const zvyrazneniHvezdicek = (pocet) => {
+	const hvezdicky = document.querySelectorAll('.fa-star')
+
+    hvezdicky.forEach((hvezdicka, index) => {
+        if (index < pocet) {
+            hvezdicka.classList.remove('far')
+            hvezdicka.classList.add('fas')
+        } else {
+            hvezdicka.classList.remove('fas')
+            hvezdicka.classList.add('far')
+        }
+    })
+}
+
+const stars = document.querySelectorAll('.fa-star');
+stars.forEach((star, index) => {
+    star.addEventListener('click', () => {
+        const starNumber = parseInt(star.textContent.trim())
+        zvyrazneniHvezdicek(starNumber)
+    })
 })
-*/
+
+index = 0 //začínám od začátku od 0 kliknutí
+
+stars.forEach((star, index) => {
+    star.addEventListener('click', () => {
+        zvyrazneniHvezdicek(index + 1)
+    })
+    star.addEventListener('mouseenter', () => {
+        zvyrazneniHvezdicek(index + 1)
+    })
+    star.addEventListener('mouseleave', () => {
+        zvyrazneniHvezdicek(index + 1)
+    })
+})
+
+
+//8.úkol
+const formular = document.querySelector('#note-form')
+const textPole = document.querySelector('#message-input')
+const policko = document.querySelector('#terms-checkbox')
+
+formular.addEventListener('submit', (event) => {
+    event.preventDefault()
+    const zprava = textPole.value.trim()
+    console.log(zprava)
+    if (zprava === '' || !policko.checked) {
+        textPole.classList.add('is-invalid')
+        policko.classList.add('is-invalid')
+        
+    } else {
+        textPole.classList.remove('is-invalid')
+        policko.classList.remove('is-invalid')
+    }
+		formular.innerHTML = `<p class="card-text">${zprava}</p>`
+})
